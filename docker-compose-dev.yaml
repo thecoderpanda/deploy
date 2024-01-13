@@ -1,6 +1,7 @@
 version: '3.9'
 
 services:
+
   audit-protocol:
     image: powerloom-audit-protocol
     expose:
@@ -57,9 +58,11 @@ services:
       - "rabbitmq"
     expose:
       - 8002
+      - 8004
       - 8555
     ports:
       - 8002:8002
+      - 8004:8004
       - 8555:8555
     volumes:
       - local_cache:/home/ubuntu/local_cache/
@@ -88,7 +91,7 @@ services:
       bash -c "sh snapshotter_autofill.sh && sh init_processes.sh"
 
   redis:
-    command: redis-server --appendonly yes
+    command: redis-server --appendonly yes "--bind", "redis",
     image: "redis:alpine"
     expose:
       - 6379
@@ -140,5 +143,6 @@ services:
     ports:
       - 5001:5001
     restart: on-failure
+
 volumes:
   local_cache:
